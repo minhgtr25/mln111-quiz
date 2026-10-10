@@ -1,0 +1,246 @@
+:root {
+    color-scheme: light;
+    --app-accent: #4f46e5;
+    --app-line: #e2e8f0;
+    --app-surface: #ffffff;
+    --app-muted: #64748b;
+}
+
+.dark {
+    color-scheme: dark;
+    --app-line: #253247;
+    --app-surface: #101827;
+    --app-muted: #94a3b8;
+}
+
+html { scroll-behavior: smooth; }
+body { background: #f1f4f8; }
+button, input, textarea { font: inherit; }
+button { -webkit-touch-callout: none; }
+button:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 3px solid rgba(99, 102, 241, .38);
+    outline-offset: 2px;
+}
+::selection { background: rgba(99, 102, 241, .2); }
+
+#entryGate {
+    background-image: radial-gradient(ellipse at 12% 12%, rgba(99, 102, 241, .09), transparent 38%);
+}
+#entryGate > div { padding-top: clamp(2rem, 7vh, 5rem); padding-bottom: max(2.5rem, env(safe-area-inset-bottom)); }
+#entryLanding > div:last-child { gap: 1rem; }
+#entryLanding > div:last-child > button {
+    min-height: 11.5rem;
+    border-radius: 1.25rem;
+    box-shadow: 0 8px 26px rgba(15, 23, 42, .035);
+}
+#entryLanding > div:last-child > button > span:first-child { margin-bottom: 2.25rem; }
+#entryLanding > div:last-child > button > span:last-child { max-width: 34ch; }
+
+#studyApp { background: #f1f4f8; }
+.dark #studyApp { background: #080f1b; }
+#studyApp > header {
+    position: relative;
+    border-color: var(--app-line);
+    box-shadow: 0 1px 0 rgba(15, 23, 42, .025);
+}
+#studyApp > header > div:first-child {
+    max-width: 1440px;
+    height: 4.25rem;
+    padding-inline: clamp(1rem, 2.7vw, 2.75rem);
+}
+#studyApp > header > div:first-child > div:first-child { min-width: max-content; }
+#studyApp > header nav { border: 1px solid var(--app-line); }
+#studyApp > header nav button { min-height: 2.4rem; padding-inline: .9rem; transition: background-color .18s, color .18s, transform .18s; }
+#studyApp > header button, #studyApp > nav button { transition: background-color .18s, color .18s, transform .18s; }
+#studyApp > header button:active, #studyApp > nav button:active { transform: scale(.96); }
+#compactProgressStrip { padding-inline: clamp(1rem, 2.7vw, 2.75rem); min-height: 2rem; }
+#studyApp > main {
+    width: min(100%, 1200px);
+    max-width: 1200px;
+    justify-content: center;
+    padding: clamp(1rem, 2.6vw, 2.5rem);
+    overflow: hidden;
+}
+#practiceView {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: min(70vh, 720px);
+    padding: clamp(1.25rem, 3vw, 2.75rem);
+    border-color: var(--app-line);
+    border-radius: 1.5rem;
+    box-shadow: 0 16px 48px rgba(15, 23, 42, .045);
+    gap: 1rem;
+}
+#practiceView > div:first-child { min-height: 2.75rem; font-size: .8rem; }
+#practiceView > div:nth-child(2) { min-height: 8rem; padding-block: clamp(1rem, 5vh, 3rem); }
+#prQuestionText { max-width: 62ch; margin-inline: auto; font-size: clamp(1.25rem, 2.3vw, 1.9rem) !important; line-height: 1.42 !important; text-wrap: pretty; }
+#prOptionsContainer { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem !important; }
+#prOptionsContainer > button {
+    min-height: 4.25rem;
+    padding: 1rem 1.1rem !important;
+    border-color: var(--app-line);
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, .025);
+}
+#prOptionsContainer > button:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(79, 70, 229, .08); }
+#prOptionsContainer > button > span:first-child { width: 2rem; height: 2rem; border-radius: .7rem; }
+#prOptionsContainer > button > span:nth-child(2) { white-space: normal; overflow: visible; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 1.45; }
+#prInlineFeedback { min-height: 2rem; margin-top: .3rem; font-size: .8rem; }
+#prStarBtn, #practiceView button[onclick="advanceNextPractice()"] { min-height: 2.5rem; min-width: 2.5rem; }
+
+#rulesView, #examView, #browseView, #flashcardView {
+    width: 100%;
+    max-width: 980px;
+    margin-inline: auto;
+    padding: clamp(.5rem, 1.6vw, 1rem);
+}
+#rulesView { gap: .75rem; }
+#rulesView > div:first-child {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(1.2rem, 3vw, 2rem);
+    border-radius: 1.35rem;
+    background: #3730a3;
+    box-shadow: 0 16px 34px rgba(49, 46, 129, .16);
+}
+#rulesView > div:first-child h2 { font-size: clamp(1.15rem, 2.3vw, 1.6rem); }
+#rulesView > div:first-child p { max-width: 64ch; font-size: .875rem; line-height: 1.65; }
+#rulesListContainer { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+#rulesListContainer > article, #rulesListContainer > div {
+    align-self: start;
+    padding: clamp(1rem, 2vw, 1.5rem) !important;
+    border-color: var(--app-line) !important;
+    border-radius: 1.25rem !important;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .035) !important;
+}
+#rulesListContainer > div > div:first-child h3 { font-size: .95rem !important; line-height: 1.5; }
+#rulesListContainer > div > div:nth-child(2) { padding: 1rem !important; border-radius: .9rem !important; font-family: inherit !important; font-size: .84rem !important; line-height: 1.65 !important; }
+#rulesListContainer > div > div:nth-child(3) { flex-wrap: wrap; }
+#rulesListContainer > div > div:nth-child(3) button { min-height: 2.6rem; }
+
+#flashcardView { justify-content: center; gap: 1rem; }
+#flashcardView > div:nth-child(2) { width: min(100%, 760px); max-height: 58vh; margin: 0 auto; }
+#fcInner { min-height: 18rem; border-radius: 1.5rem !important; box-shadow: 0 16px 42px rgba(15, 23, 42, .06) !important; }
+#flashcardView > div:last-child { width: min(100%, 760px); margin: 1rem auto 0; }
+#flashcardView > div:last-child button { min-height: 3rem; }
+
+#examView > #examIntroScreen, #examResultScreen {
+    width: min(100%, 720px);
+    margin: auto;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border-color: var(--app-line);
+    border-radius: 1.5rem;
+    box-shadow: 0 16px 42px rgba(15, 23, 42, .05);
+}
+#examIntroScreen h2 { font-size: clamp(1.4rem, 3vw, 2rem); }
+#examIntroScreen p { max-width: 54ch; margin-inline: auto; font-size: .95rem; line-height: 1.65; }
+#examActiveScreen > div:first-child { min-height: 3rem; padding: .5rem .85rem; border-radius: .9rem; background: var(--app-surface); }
+#examActiveScreen > div:nth-child(2) { padding: clamp(1rem, 3vw, 2rem); border-color: var(--app-line); border-radius: 1.25rem; }
+#examQuestion { max-width: 64ch; font-size: clamp(1.1rem, 2vw, 1.45rem); line-height: 1.5; }
+#examOptions > button { min-height: 3.25rem; padding: .8rem 1rem; border-color: var(--app-line); border-radius: .9rem; font-size: .9rem; }
+#examOptions > button > span:last-child { white-space: normal; line-height: 1.45; }
+
+#browseView > div:first-child { padding: .8rem 0 1rem; font-size: .9rem; }
+#browseList { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem; }
+#browseList > div { padding: 1rem !important; border-color: var(--app-line) !important; border-radius: 1rem !important; font-size: .875rem !important; line-height: 1.55; }
+#browseList > div > div:first-child { gap: .75rem; }
+#browseList > div > div:last-child { white-space: normal; }
+
+#studyApp > nav { padding: .55rem .5rem max(.55rem, env(safe-area-inset-bottom)); }
+#studyApp > nav > div { max-width: 36rem; gap: .25rem; }
+#studyApp > nav button { min-height: 3.2rem; border-radius: .8rem; justify-content: center; gap: .15rem; }
+#studyApp > nav button span { font-size: .68rem; }
+
+.dark body { background: #080f1b; }
+.dark #entryGate { background-image: radial-gradient(ellipse at 12% 12%, rgba(99, 102, 241, .14), transparent 38%); }
+#authModal, #importModal, #searchModal { backdrop-filter: blur(8px); }
+#authModal > div, #importModal > div, #searchModal > div { border-color: var(--app-line); border-radius: 1.25rem; box-shadow: 0 24px 70px rgba(15, 23, 42, .2); }
+
+@media (max-width: 767px) {
+    body { font-size: 16px; }
+    #studyApp > header > div:first-child { height: 3.65rem; padding-inline: .75rem; gap: .4rem; }
+    #studyApp > header > div:first-child > div:first-child { gap: .45rem; }
+    #studyApp > header > div:first-child > div:first-child > div:first-child { gap: .4rem; }
+    #studyApp > header > div:first-child > div:first-child > div:first-child > div { gap: .35rem; }
+    #quickFilterPill { max-width: 6.25rem; overflow: hidden; white-space: nowrap; }
+    #studyApp > header > div:first-child > div:last-child { gap: .1rem; }
+    #studyApp > header > div:first-child > div:last-child > button { width: 2.5rem; height: 2.5rem; flex: 0 0 auto; }
+    #studyApp > header > div:first-child > div:last-child > button[onclick*="openModal('importModal')"] { width: 2.15rem; padding: .5rem; }
+    #compactProgressStrip { min-height: 1.8rem; padding: .35rem .8rem; font-size: .68rem; }
+    #stripSpeed, #stripTimeLeft, #stripEta, #compactProgressStrip > div:first-child > span:nth-child(3) { display: none !important; }
+    #studyApp > header > div:last-child { height: 2px; }
+    #studyApp > main { padding: .65rem .65rem .8rem; min-height: 0; }
+    #practiceView {
+        justify-content: flex-start;
+        gap: .7rem;
+        padding: .9rem;
+        border-radius: 1.1rem;
+        overflow-y: auto !important;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+    }
+    #practiceView > div:first-child { min-height: 2.65rem; padding-bottom: .5rem; font-size: .72rem; }
+    #practiceView > div:first-child > div:first-child { min-width: 0; flex-wrap: wrap; }
+    #practiceView > div:first-child > div:last-child { gap: .25rem; }
+    #practiceView > div:first-child > div:last-child > span { font-size: .72rem; }
+    #practiceView > div:nth-child(2) { min-height: max-content; margin: .2rem 0 !important; padding: .5rem 0 !important; }
+    #prQuestionText { font-size: clamp(1.02rem, 5vw, 1.35rem) !important; line-height: 1.42 !important; }
+    #prOptionsContainer { grid-template-columns: minmax(0, 1fr); gap: .45rem !important; }
+    #prOptionsContainer > button { min-height: 3.1rem; padding: .65rem .75rem !important; border-radius: .85rem; gap: .65rem; }
+    #prOptionsContainer > button > span:first-child { width: 1.75rem; height: 1.75rem; flex: 0 0 auto; }
+    #prOptionsContainer > button > span:nth-child(2) { font-size: .83rem !important; line-height: 1.4; -webkit-line-clamp: 4; }
+    #prInlineFeedback { flex: 0 0 auto; font-size: .72rem; }
+    #rulesView, #examView, #browseView, #flashcardView { padding: .3rem; }
+    #rulesView > div:first-child { padding: 1rem; margin-bottom: .25rem; border-radius: 1rem; }
+    #rulesView > div:first-child > div { align-items: flex-start; }
+    #rulesView > div:first-child h2 { font-size: 1rem; line-height: 1.4; }
+    #rulesView > div:first-child p { font-size: .75rem; line-height: 1.5; }
+    #rulesView > div:first-child button { min-height: 2.6rem; }
+    #rulesListContainer { grid-template-columns: minmax(0, 1fr); gap: .7rem; }
+    #rulesListContainer > div { padding: .9rem !important; border-radius: 1rem !important; }
+    #rulesListContainer > div > div:nth-child(3) { align-items: stretch; }
+    #rulesListContainer > div > div:nth-child(3) button { font-size: .75rem; }
+    #rulesListContainer > div > div:nth-child(3) button:first-child { padding-block: .6rem; }
+    #flashcardView { gap: .75rem; }
+    #flashcardView > div:first-child { padding: .25rem .1rem; }
+    #flashcardView > div:nth-child(2) { width: 100%; max-height: 52vh; aspect-ratio: 4 / 3; }
+    #fcInner { min-height: 14rem; padding: 1rem !important; border-radius: 1.2rem !important; }
+    #fcFront, #fcBack { padding: 1.1rem !important; }
+    #flashcardView > div:last-child { gap: .5rem; margin-top: .4rem; }
+    #flashcardView > div:last-child > button { width: 2.75rem; height: 2.75rem; flex: 0 0 auto; }
+    #flashcardView > div:last-child > div { gap: .45rem; }
+    #flashcardView > div:last-child > div button { min-height: 2.75rem; padding-inline: .5rem; font-size: .7rem; }
+    #examView { gap: .75rem; }
+    #examIntroScreen, #examResultScreen { padding: 1.4rem 1rem !important; border-radius: 1.2rem !important; }
+    #examActiveScreen { gap: .6rem; }
+    #examActiveScreen > div:first-child { gap: .5rem; font-size: .75rem; }
+    #examActiveScreen > div:first-child button { min-height: 2.5rem; padding: .5rem .75rem; }
+    #examActiveScreen > div:nth-child(2) { overflow-y: auto; gap: 1rem; }
+    #examOptions > button { min-height: 3rem; font-size: .8rem; }
+    #browseList { grid-template-columns: minmax(0, 1fr); gap: .6rem; }
+    #browseList > div { padding: .85rem !important; }
+    #studyApp > nav { border-color: var(--app-line); box-shadow: 0 -8px 28px rgba(15, 23, 42, .04); }
+    #studyApp > nav button span { font-size: .62rem; }
+    #studyApp > nav button svg { width: 1.1rem; height: 1.1rem; }
+    .fixed.inset-0.z-50 > div { max-height: calc(100dvh - 1.5rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)); overflow-y: auto; }
+}
+
+@media (max-width: 500px) {
+    #studyApp > header > div:first-child { height: auto; min-height: 3.6rem; flex-wrap: wrap; padding: .45rem .65rem; }
+    #studyApp > header > div:first-child > div:first-child { flex: 1 1 auto; }
+    #studyApp > header > div:first-child > div:last-child { width: 100%; justify-content: space-around; }
+    #studyApp > header > div:first-child > div:last-child > button { width: 2.5rem; height: 2.5rem; }
+    #practiceView { padding: .7rem; }
+}
+
+@media (min-width: 768px) and (max-width: 1080px) {
+    #studyApp > header > div:first-child { gap: .5rem; padding-inline: 1rem; }
+    #studyApp > header nav button { padding-inline: .55rem; font-size: .7rem; }
+    #studyApp > header > div:first-child > div:last-child { gap: .15rem; }
+    #studyApp > header > div:first-child > div:last-child > button { width: 2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}

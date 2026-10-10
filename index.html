@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Ôn Thi Triết Học Mác - Lênin | Quizlet MLN111 Pro Master</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            overflow-x: hidden;
+        }
+        @media (max-width: 767px) {
+            #studyApp { height: 100%; min-height: 0; }
+            .mobile-screen-fit {
+                height: 100dvh;
+                max-height: 100dvh;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden !important;
+            }
+            .mobile-practice-card {
+                flex: 1 1 0%;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                overflow: hidden !important;
+            }
+        }
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.4); border-radius: 9999px; }
+    </style>
+    <link rel="stylesheet" href="./css/app.css">
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen mobile-screen-fit transition-colors duration-200">
+    <section id="entryGate" class="fixed inset-0 z-40 min-h-[100dvh] overflow-y-auto bg-[#f4f5f7] text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+        <div class="mx-auto flex min-h-[100dvh] w-full max-w-5xl flex-col justify-center px-5 py-10 sm:px-8">
+            <div class="mb-8 flex items-center gap-3">
+                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-600 text-white"><i data-lucide="book-open-check" class="h-5 w-5"></i></div>
+                <div><div class="text-xs font-bold uppercase tracking-[0.18em] text-indigo-600 dark:text-indigo-400">MLN111</div><div class="text-sm text-slate-500 dark:text-slate-400">Không gian ôn tập cá nhân</div></div>
+            </div>
+            <div id="entrySignedOut" class="max-w-xl">
+                <p class="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-slate-500">Bắt đầu học</p>
+                <h1 class="text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl">Ôn tập Triết học<br><span class="text-indigo-600 dark:text-indigo-400">theo cách của bạn.</span></h1>
+                <p class="mt-5 max-w-lg text-sm leading-6 text-slate-600 dark:text-slate-300">Đăng nhập để mở không gian học và đồng bộ tiến độ giữa máy tính, điện thoại.</p>
+                <button onclick="openAccountModal()" class="mt-7 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-900/10 transition hover:bg-indigo-700 active:scale-[0.98]"><i data-lucide="log-in" class="h-4 w-4"></i>Đăng nhập / tạo tài khoản</button>
+                <p class="mt-3 text-xs text-slate-500">Cần tài khoản để tiếp tục vào phần học.</p>
+            </div>
+            <div id="entryLanding" class="hidden">
+                <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+                    <div><p class="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-indigo-600 dark:text-indigo-400">Bạn muốn học gì hôm nay?</p><h1 class="text-3xl font-extrabold tracking-tight sm:text-5xl">Chọn chế độ ôn tập</h1><p id="landingGreeting" class="mt-3 text-sm text-slate-500 dark:text-slate-400"></p></div>
+                    <button onclick="logoutMLN()" class="rounded-lg px-3 py-2 text-xs font-semibold text-slate-500 transition hover:bg-white dark:hover:bg-slate-900">Đăng xuất</button>
+                </div>
+                <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    <button onclick="enterStudyMode('practice')" class="rounded-2xl bg-white p-5 text-left shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:ring-indigo-300 dark:bg-slate-900 dark:ring-slate-800"><span class="mb-8 flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950 dark:text-indigo-300"><i data-lucide="list-checks" class="h-5 w-5"></i></span><span class="block text-lg font-bold">Luyện tập</span><span class="mt-1 block text-sm leading-5 text-slate-500">Trả lời từng câu và xem phản hồi ngay.</span></button>
+                    <button onclick="enterStudyMode('rules')" class="rounded-2xl bg-white p-5 text-left shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:ring-indigo-300 dark:bg-slate-900 dark:ring-slate-800"><span class="mb-8 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300"><i data-lucide="lightbulb" class="h-5 w-5"></i></span><span class="block text-lg font-bold">Mẹo & quy tắc</span><span class="mt-1 block text-sm leading-5 text-slate-500">Xem mẹo và nhóm câu hỏi liên quan.</span></button>
+                    <button onclick="enterStudyMode('flashcard')" class="rounded-2xl bg-white p-5 text-left shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:ring-indigo-300 dark:bg-slate-900 dark:ring-slate-800"><span class="mb-8 flex h-10 w-10 items-center justify-center rounded-xl bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300"><i data-lucide="layers" class="h-5 w-5"></i></span><span class="block text-lg font-bold">Flashcard</span><span class="mt-1 block text-sm leading-5 text-slate-500">Nhớ đáp án bằng thẻ hỏi đáp.</span></button>
+                    <button onclick="enterStudyMode('exam')" class="rounded-2xl bg-white p-5 text-left shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:ring-indigo-300 dark:bg-slate-900 dark:ring-slate-800"><span class="mb-8 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"><i data-lucide="clipboard-check" class="h-5 w-5"></i></span><span class="block text-lg font-bold">Thi thử</span><span class="mt-1 block text-sm leading-5 text-slate-500">Làm bài mô phỏng có giới hạn thời gian.</span></button>
+                    <button onclick="enterStudyMode('browse')" class="rounded-2xl bg-white p-5 text-left shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:ring-indigo-300 dark:bg-slate-900 dark:ring-slate-800"><span class="mb-8 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-violet-700 dark:bg-violet-950 dark:text-violet-300"><i data-lucide="book-open" class="h-5 w-5"></i></span><span class="block text-lg font-bold">Kho câu hỏi</span><span class="mt-1 block text-sm leading-5 text-slate-500">Tìm kiếm và xem toàn bộ ngân hàng câu.</span></button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="studyApp" class="hidden min-h-screen flex-col">
+
+    <!-- COMPACT RESPONSIVE HEADER -->
+    <header class="shrink-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-30">
+        <div class="max-w-5xl mx-auto px-3 sm:px-5 h-12 sm:h-14 flex items-center justify-between gap-2">
+            <!-- Brand & Filter Quick Pill -->
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-xs">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="font-bold text-xs sm:text-sm tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-300 bg-clip-text text-transparent">FE_MLN111</span>
+                    <!-- Filter pill selector -->
+                    <button onclick="cycleFilter()" id="quickFilterPill" class="text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition flex items-center gap-1">
+                        <span id="quickFilterLabel">Tất cả (0)</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3 opacity-60"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Desktop View Navigation -->
+            <nav class="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-semibold">
+                <button onclick="switchView('practice')" id="deskNavPractice" class="px-3 py-1 rounded-lg bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs">Luyện tập</button>
+                <button onclick="switchView('rules')" id="deskNavRules" class="px-3 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 flex items-center gap-1">
+                    <span>Mẹo & Quy tắc</span>
+                </button>
+                <button onclick="switchView('flashcard')" id="deskNavFlashcard" class="px-3 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900">Flashcard</button>
+                <button onclick="switchView('exam')" id="deskNavExam" class="px-3 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900">Thi thử</button>
+                <button onclick="switchView('browse')" id="deskNavBrowse" class="px-3 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900">Kho câu</button>
+            </nav>
+
+            <!-- Quick Action Icons -->
+            <div class="flex items-center gap-1 sm:gap-2">
+                <button onclick="window.showMLNLanding?.(window.MLN_CURRENT_USER)" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Trang chủ" aria-label="Trang chủ"><i data-lucide="house" class="w-4 h-4"></i></button>
+                <!-- Nút nạp lại file TXT nhanh -->
+                <button onclick="openModal('importModal')" class="px-2 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 text-[11px] font-bold flex items-center gap-1 border border-emerald-200 dark:border-emerald-800" title="Nạp dữ liệu từ file TXT">
+                    <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                    <span id="loadBtnText" class="hidden sm:inline">Nạp TXT</span>
+                </button>
+                <button id="soundToggleBtn" onclick="toggleAudio()" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Âm thanh">
+                    <i data-lucide="volume-2" id="soundIcon" class="w-4 h-4"></i>
+                </button>
+                <button onclick="toggleDarkMode()" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Sáng/Tối">
+                    <i data-lucide="moon" id="themeIcon" class="w-4 h-4"></i>
+                </button>
+                <button onclick="openModal('searchModal')" class="w-8 h-8 rounded-lg flex items-center justify-center bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 transition" title="Tìm & Nhảy câu">
+                    <i data-lucide="search" class="w-4 h-4"></i>
+                </button>
+                <button onclick="openAccountModal()" id="accountButton" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Tai khoan va dong bo" aria-label="Tai khoan"><i data-lucide="user-round" class="w-4 h-4"></i></button>
+            </div>
+        </div>
+
+        <!-- ULTRA-COMPACT 1-LINE PROGRESS & ETR BAR -->
+        <div id="compactProgressStrip" class="bg-slate-50 dark:bg-slate-900/90 border-t border-slate-200/60 dark:border-slate-800/80 px-3 sm:px-5 py-1 text-[11px] sm:text-xs flex items-center justify-between text-slate-500 dark:text-slate-400 font-medium">
+            <div class="flex items-center gap-1.5 truncate">
+                <span id="stripQCount" class="font-bold text-slate-800 dark:text-slate-200 font-mono">1/0</span>
+                <span class="opacity-40">•</span>
+                <span id="stripPct" class="font-bold text-indigo-600 dark:text-indigo-400 font-mono">0.0%</span>
+                <span class="opacity-40 hidden xs:inline">•</span>
+                <span id="stripRollbackBadge" class="hidden text-[10px] font-bold text-amber-600 bg-amber-50 dark:bg-amber-950/60 px-1.5 py-0.2 rounded border border-amber-200 dark:border-amber-900">
+                    Lùi lại: <span id="stripRollbackCount">0</span>
+                </span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0 text-[10px] sm:text-xs font-mono">
+                <span id="stripSpeed">~10s/câu</span>
+                <span class="opacity-40">•</span>
+                <span id="stripTimeLeft" class="font-semibold text-purple-600 dark:text-purple-400">~1h30p</span>
+                <span class="opacity-40 hidden sm:inline">•</span>
+                <span id="stripEta" class="hidden sm:inline text-emerald-600 dark:text-emerald-400">Xong 12:45</span>
+            </div>
+        </div>
+        <!-- Ultra-thin gradient progress line -->
+        <div class="w-full bg-slate-200 dark:bg-slate-800 h-1 relative overflow-hidden">
+            <div id="thinProgressBar" class="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500 transition-all duration-200 w-[0.2%]"></div>
+        </div>
+    </header>
+
+    <!-- MAIN VIEW AREA -->
+    <main class="flex-1 max-w-4xl w-full mx-auto p-2 sm:p-4 flex flex-col justify-between overflow-hidden">
+
+        <!-- VIEW 1: PRACTICE MODE (ZERO-SCROLL, INSTANT EVALUATION ON TAP) -->
+        <section id="practiceView" class="mobile-practice-card bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl sm:rounded-3xl p-3 sm:p-5 shadow-xs transition-all">
+            
+            <!-- Question Top Sub-Bar -->
+            <div class="shrink-0 flex items-center justify-between gap-2 pb-1.5 sm:pb-2 border-b border-slate-100 dark:border-slate-800/80 text-[11px] sm:text-xs">
+                <div class="flex items-center gap-1.5 truncate">
+                    <span class="font-bold text-slate-700 dark:text-slate-300 font-mono" id="prLiveNum">Câu 1/0</span>
+                    <span id="prRollbackNotice" class="hidden px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-800 animate-pulse">
+                        ⚠️ Ôn lại câu sai
+                    </span>
+                    <span id="prRulePill" class="hidden px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 truncate">
+                        Mẹo
+                    </span>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                    <span id="prScorePill" class="font-bold text-emerald-600 dark:text-emerald-400 font-mono">Đúng: 0</span>
+                    <button onclick="toggleStarCurrent()" id="prStarBtn" class="text-slate-400 hover:text-amber-500 transition p-0.5" title="Đánh dấu câu">
+                        <i data-lucide="star" class="w-4 h-4"></i>
+                    </button>
+                    <!-- Skip / Next manual trigger -->
+                    <button onclick="advanceNextPractice()" class="px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-300 font-semibold text-[11px] flex items-center gap-1">
+                        <span>Tiếp</span>
+                        <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dynamic Question Box (Auto-sized typography to fit container) -->
+            <div class="shrink-0 my-auto py-1 sm:py-2 flex items-center">
+                <p id="prQuestionText" class="w-full font-bold text-slate-900 dark:text-slate-100 tracking-tight leading-snug"></p>
+            </div>
+
+            <!-- Dynamic Options Container -->
+            <div id="prOptionsContainer" class="shrink-0 space-y-1.5 sm:space-y-2.5">
+                <!-- Injected via JavaScript -->
+            </div>
+
+            <!-- Instant Micro-Feedback Line -->
+            <div id="prInlineFeedback" class="shrink-0 min-h-[1.25rem] mt-1.5 flex items-center justify-between text-[11px] sm:text-xs font-semibold px-1">
+                <span id="prFeedbackMsg" class="truncate text-slate-400">Chạm vào phương án để trả lời</span>
+                <span id="prAutoNextTimer" class="font-mono text-slate-400 text-[10px]"></span>
+            </div>
+        </section>
+
+        <!-- VIEW 2: ⚡ RULES & PATTERN HUB (MẸO & QUY TẮC PHẢN XẠ) -->
+        <section id="rulesView" class="hidden flex-1 flex flex-col max-w-3xl mx-auto w-full p-1 sm:p-2 overflow-y-auto custom-scrollbar">
+            <!-- Header bar inside Rules Hub -->
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl p-3 sm:p-4 mb-3 shadow-xs">
+                <div class="flex items-center justify-between gap-2">
+                    <div>
+                        <h2 class="text-sm sm:text-base font-extrabold flex items-center gap-1.5">
+                            <i data-lucide="lightbulb" class="w-4 h-4 text-amber-300"></i>
+                            10 Mẹo & Quy Tắc Phản Xạ Nhanh MLN111
+                        </h2>
+                        <p class="text-[11px] text-indigo-100 mt-0.5">Mỗi quy tắc đính kèm trực tiếp tất cả câu hỏi tương ứng trong đề. Chạm vào để xem và luyện ngay.</p>
+                    </div>
+                    <button onclick="resetRuleFilterAndPractice()" class="px-2.5 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 text-white text-[11px] font-bold backdrop-blur-xs shrink-0 flex items-center gap-1">
+                        <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+                        <span>Ôn toàn bộ</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Rules Catalog Accordion/List -->
+            <div id="rulesListContainer" class="space-y-2.5 pb-8">
+                <!-- Injected dynamically via JS -->
+            </div>
+        </section>
+
+        <!-- VIEW 3: FLASHCARD VIEW -->
+        <section id="flashcardView" class="hidden flex-1 flex flex-col justify-between max-w-2xl mx-auto w-full p-2">
+            <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+                <span>Thẻ <span id="fcIdx" class="font-bold">1</span>/<span id="fcTot">0</span></span>
+                <span class="text-indigo-500 font-medium">Chạm thẻ để lật</span>
+            </div>
+            <div class="w-full aspect-[4/3] sm:aspect-[16/10] max-h-[360px] perspective-1000 cursor-pointer" onclick="flipFlashcard()">
+                <div id="fcInner" class="relative w-full h-full duration-300 transform-style-3d shadow-sm rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 flex flex-col justify-between text-center">
+                    <div id="fcFront" class="absolute inset-0 backface-hidden p-6 flex flex-col justify-between rounded-3xl">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-500">Câu hỏi</span>
+                        <p id="fcQuestion" class="my-auto font-bold text-sm sm:text-lg text-slate-800 dark:text-slate-100 leading-snug"></p>
+                        <span class="text-[10px] text-slate-400">Nhấn để xem đáp án</span>
+                    </div>
+                    <div id="fcBack" class="absolute inset-0 backface-hidden rotate-y-180 p-6 flex flex-col justify-between rounded-3xl bg-slate-50 dark:bg-slate-900">
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-500">Đáp án chính xác</span>
+                        <p id="fcAnswer" class="my-auto font-bold text-sm sm:text-lg text-slate-900 dark:text-white leading-snug"></p>
+                        <span class="text-[10px] text-slate-400">Nhấn để lật lại câu hỏi</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between gap-3 mt-4">
+                <button onclick="prevFlashcard()" class="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+                <div class="flex gap-2 flex-1 max-w-xs">
+                    <button onclick="markFlashcard(false)" class="flex-1 py-2.5 rounded-xl bg-rose-50 dark:bg-rose-950 text-rose-600 dark:text-rose-400 font-bold text-xs">Chưa thuộc</button>
+                    <button onclick="markFlashcard(true)" class="flex-1 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 font-bold text-xs">Đã nhớ</button>
+                </div>
+                <button onclick="nextFlashcard()" class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- VIEW 4: EXAM SIMULATION -->
+        <section id="examView" class="hidden flex-1 flex flex-col max-w-2xl mx-auto w-full p-2 overflow-y-auto custom-scrollbar">
+            <div id="examIntroScreen" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 text-center my-auto shadow-xs">
+                <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-950 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <i data-lucide="award" class="w-6 h-6"></i>
+                </div>
+                <h2 class="text-lg font-bold mb-1.5">Thi Thử Trắc Nghiệm MLN111</h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mb-5">Đề chuẩn 40 câu ngẫu nhiên từ kho 533 câu, thời gian làm bài 35 phút.</p>
+                <button onclick="startExamSimulation()" class="py-3 px-6 rounded-2xl bg-indigo-600 text-white font-bold text-xs hover:bg-indigo-700 transition">Bắt đầu thi ngay (35 phút)</button>
+            </div>
+            <div id="examActiveScreen" class="hidden flex-1 flex flex-col justify-between">
+                <div class="flex items-center justify-between mb-3 text-xs font-bold">
+                    <span id="examTimer" class="font-mono text-rose-500">35:00</span>
+                    <span>Câu <span id="examIdx">1</span>/<span id="examTot">40</span></span>
+                    <button onclick="submitExamFinal()" class="px-3 py-1 bg-indigo-600 text-white rounded-lg text-xs font-bold">Nộp bài</button>
+                </div>
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex-1 flex flex-col justify-between">
+                    <div>
+                        <p id="examQuestion" class="font-bold text-sm sm:text-base mb-4"></p>
+                        <div id="examOptions" class="space-y-2"></div>
+                    </div>
+                    <div class="flex justify-between mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
+                        <button onclick="prevExamQuestion()" class="px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded-lg text-xs">Trước</button>
+                        <button onclick="nextExamQuestion()" class="px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold">Tiếp</button>
+                    </div>
+                </div>
+            </div>
+            <div id="examResultScreen" class="hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 text-center my-auto">
+                <div id="examGrade" class="w-14 h-14 mx-auto mb-2 rounded-2xl flex items-center justify-center font-extrabold text-2xl"></div>
+                <h3 id="examTitle" class="text-lg font-bold"></h3>
+                <p id="examSummary" class="text-xs text-slate-500 mb-4"></p>
+                <button onclick="switchView('practice')" class="py-2 px-4 rounded-xl bg-indigo-600 text-white font-bold text-xs">Ôn tiếp luyện tập</button>
+            </div>
+        </section>
+
+        <!-- VIEW 5: BROWSE ALL -->
+        <section id="browseView" class="hidden flex-1 flex flex-col max-w-3xl mx-auto w-full p-2 overflow-y-auto custom-scrollbar">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold text-slate-500">Toàn bộ ngân hàng câu hỏi (<span id="browseCount">0</span>)</span>
+            </div>
+            <div id="browseList" class="space-y-2 pb-8"></div>
+        </section>
+    </main>
+
+    <!-- MOBILE 5-COL MINIMAL BOTTOM NAVIGATION -->
+    <nav class="md:hidden shrink-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-1 py-1.5 z-40">
+        <div class="grid grid-cols-5 gap-0.5 max-w-md mx-auto text-center">
+            <button onclick="switchView('practice')" id="mobNavPractice" class="py-1 text-indigo-600 dark:text-indigo-400 flex flex-col items-center">
+                <i data-lucide="check-square" class="w-4 h-4"></i>
+                <span class="text-[9px] font-bold mt-0.5">Luyện tập</span>
+            </button>
+            <button onclick="switchView('rules')" id="mobNavRules" class="py-1 text-slate-400 flex flex-col items-center">
+                <span class="text-[9px] font-medium mt-0.5">Mẹo thi</span>
+            </button>
+            <button onclick="switchView('flashcard')" id="mobNavFlashcard" class="py-1 text-slate-400 flex flex-col items-center">
+                <i data-lucide="layers" class="w-4 h-4"></i>
+                <span class="text-[9px] font-medium mt-0.5">Flashcard</span>
+            </button>
+            <button onclick="switchView('exam')" id="mobNavExam" class="py-1 text-slate-400 flex flex-col items-center">
+                <i data-lucide="award" class="w-4 h-4"></i>
+                <span class="text-[9px] font-medium mt-0.5">Thi thử</span>
+            </button>
+            <button onclick="switchView('browse')" id="mobNavBrowse" class="py-1 text-slate-400 flex flex-col items-center">
+                <i data-lucide="book-open" class="w-4 h-4"></i>
+                <span class="text-[9px] font-medium mt-0.5">Kho câu</span>
+            </button>
+        </div>
+    </nav>
+    </div>
+
+    <!-- MODAL 1: NẠP FILE TXT (OFFLINE / IMPORT DIALOG) -->
+    <div id="importModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 hidden">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-lg p-5 shadow-2xl flex flex-col max-h-[85vh]">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center">
+                        <i data-lucide="file-text" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="font-bold text-sm">Nạp Dữ Liệu Câu Hỏi MLN111</h3>
+                </div>
+                <button onclick="closeModal('importModal')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            
+            <div class="my-3 space-y-3 overflow-y-auto custom-scrollbar flex-1 text-xs">
+                <div class="p-3 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200/80 dark:border-indigo-900/50 text-indigo-900 dark:text-indigo-200">
+                    <span class="font-bold">💡 Hướng dẫn:</span>
+                    Chọn file <b>FE_MLN111_2.txt</b> (hoặc <b>FE_MLN111.txt</b>). Hệ thống sẽ tự động tách 533 câu hỏi và chia đúng vào 10 danh mục Mẹo thi để ôn cấp tốc. Dữ liệu sẽ được lưu tự động trên thiết bị của bạn.
+                </div>
+
+                <!-- Input chọn File trực tiếp -->
+                <div class="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-indigo-500 rounded-2xl p-4 text-center cursor-pointer bg-slate-50 dark:bg-slate-800/40" onclick="document.getElementById('txtFileInput').click()">
+                    <input type="file" id="txtFileInput" accept=".txt,.json" class="hidden" onchange="handleFileUpload(event)">
+                    <i data-lucide="upload-cloud" class="w-8 h-8 text-indigo-500 mx-auto mb-1.5"></i>
+                    <p class="font-bold text-slate-700 dark:text-slate-200">Chạm để chọn file FE_MLN111_2.txt</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Hỗ trợ file .txt chứa 533 câu hỏi</p>
+                </div>
+
+                <!-- Hoặc Dán nội dung trực tiếp -->
+                <div>
+                    <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Hoặc dán toàn bộ nội dung file TXT vào đây:</label>
+                    <textarea id="txtPasteArea" rows="4" placeholder="Dán nội dung từ file FE_MLN111_2.txt vào đây..." class="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-2.5 text-xs outline-none focus:ring-1 focus:ring-indigo-500 font-mono"></textarea>
+                </div>
+            </div>
+
+            <div class="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <button onclick="processPastedText()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                    <span>Xác nhận & Nạp 533 câu</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="authModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 hidden">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl w-full max-w-md p-5 shadow-2xl">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800"><div><h3 class="font-bold text-base">Tai khoan hoc tap</h3><p class="text-[11px] text-slate-500 mt-0.5">Dang nhap de dong bo may tinh va dien thoai</p></div><button onclick="closeModal('authModal')" class="text-slate-400" aria-label="Dong"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+            <div id="authStatus" role="status" class="my-3 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-800 dark:text-indigo-200 px-3 py-2.5 text-xs leading-relaxed">Dang kiem tra cau hinh dong bo...</div>
+            <div id="signedOutPanel" class="space-y-3">
+                <label class="block text-xs font-semibold">Email<input id="authEmail" type="email" autocomplete="email" class="mt-1 w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500" placeholder="ban@email.com"></label>
+                <label class="block text-xs font-semibold">Mat khau<input id="authPassword" type="password" autocomplete="current-password" minlength="8" class="mt-1 w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500" placeholder="It nhat 8 ky tu"></label>
+                <div class="grid grid-cols-2 gap-2"><button onclick="registerMLN()" class="py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold">Tao tai khoan</button><button onclick="loginMLN()" class="py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-bold">Dang nhap</button></div>
+                <button onclick="resetPasswordMLN()" class="w-full text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline">Quen mat khau?</button>
+            </div>
+            <div id="recoveryPanel" class="hidden space-y-3 mb-3"><label class="block text-xs font-semibold">Mat khau moi<input id="newAuthPassword" type="password" autocomplete="new-password" minlength="8" class="mt-1 w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2.5 text-sm" placeholder="It nhat 8 ky tu"></label><button onclick="completePasswordResetMLN()" class="w-full py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-bold">Luu mat khau moi</button></div>
+            <div id="signedInPanel" class="hidden space-y-3"><div class="rounded-xl bg-slate-50 dark:bg-slate-800 px-3 py-2.5"><div class="text-[10px] uppercase tracking-wide text-slate-500">Dang dang nhap</div><div id="accountEmail" class="font-semibold text-sm break-all"></div></div><div id="cloudSyncStatus" class="text-xs text-slate-600 dark:text-slate-300">Dang dong bo tien do...</div><button onclick="logoutMLN()" class="w-full py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold">Dang xuat</button></div>
+            <p class="mt-3 text-[10px] leading-relaxed text-slate-400">Cau da on, cau dung, cau sai va cau da danh dau se dong bo. Mat khau do Supabase Auth quan ly; ung dung khong luu mat khau.</p>
+        </div>
+    </div>
+
+    <!-- QUICK SEARCH / JUMP MODAL -->
+    <div id="searchModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 hidden">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-md p-4 shadow-xl flex flex-col max-h-[80vh]">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+                <span class="font-bold text-xs">Nhảy câu hoặc Tìm kiếm</span>
+                <button onclick="closeModal('searchModal')" class="text-slate-400"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <div class="flex gap-2 my-2">
+                <input type="number" id="jumpNumInput" placeholder="Nhập số câu..." min="1" class="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-indigo-500">
+                <button onclick="jumpToSpecificNumber()" class="px-3 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-bold">Đi tới</button>
+            </div>
+            <input type="text" id="keywordSearchInput" oninput="handleKeywordSearch(this.value)" placeholder="Từ khóa (vd: Phoiobắc, thực tiễn, Lênin)..." class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs outline-none mb-2">
+            <div id="searchResultList" class="flex-1 overflow-y-auto custom-scrollbar space-y-1.5 text-xs"></div>
+        </div>
+    </div>
+
+    <!-- SCRIPT APPLICATION LOGIC -->
+    <script src="./js/rules.js"></script>
+    <script src="./js/database.js"></script>
+    <script src="./js/practice.js"></script>
+    <script src="./js/rule-hub.js"></script>
+    <script src="./js/navigation.js"></script>
+    <script src="./js/interactions.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./js/supabase-config.js"></script>
+    <script src="./js/cloud-sync.js"></script>
+</body>
+</html>
