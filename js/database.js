@@ -76,7 +76,16 @@
             savedAnswered = new Set(state.answered);
             savedCorrect = new Set(state.correct);
             persistProgressLocally();
-            if (DB.length) { refreshProgressMetrics(); renderPracticeQuestion(); renderBrowse(); }
+            if (DB.length) {
+                refreshProgressMetrics();
+                const current = state.pool[state.prIdx];
+                const starButton = document.getElementById('prStarBtn');
+                if (current && starButton) {
+                    const isStarred = state.starred.has(current.id);
+                    starButton.innerHTML = `<i data-lucide="star" class="w-4 h-4 ${isStarred ? 'text-amber-500 fill-amber-500' : 'text-slate-400'}"></i>`;
+                    window.lucide?.createIcons();
+                }
+            }
             return window.exportMLNProgress();
         };
 
