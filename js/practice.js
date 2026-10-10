@@ -91,6 +91,7 @@
             if (state.autoAdvanceTimer) clearTimeout(state.autoAdvanceTimer);
 
             state.prAnswered = false;
+            state.waitingAfterWrong = false;
             state.startTime = Date.now();
             const item = state.pool[state.prIdx];
 
@@ -164,10 +165,7 @@
         }
 
         function onOptionTapped(chosenLetter) {
-            if (state.prAnswered) {
-                advanceNextPractice();
-                return;
-            }
+            if (state.prAnswered) return;
             state.prAnswered = true;
 
             const duration = Math.min(60, Math.max(1, (Date.now() - state.startTime) / 1000));
@@ -180,6 +178,8 @@
 
             const feedbackMsg = document.getElementById('prFeedbackMsg');
             const timerMsg = document.getElementById('prAutoNextTimer');
+            const continueBtn = document.getElementById('prContinueBtn');
+            continueBtn?.classList.add('hidden');
 
             state.answered.add(item.id);
             if (isCorrect) {
@@ -189,32 +189,37 @@
                 feedbackMsg.className = "truncate text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1";
                 feedbackMsg.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 inline"></i> Chính xác! Đáp án đúng: ${item.ans}`;
             } else {
+                state.waitingAfterWrong = true;
                 state.correct.delete(item.id);
                 state.wrong.add(item.id);
                 scheduleRollback(item);
-                feedbackMsg.className = "truncate text-rose-600 dark:text-rose-400 font-bold flex items-center gap-1";
-                feedbackMsg.innerHTML = `<i data-lucide="x" class="w-3.5 h-3.5 inline"></i> Sai! Đáp án đúng là: ${item.ans}`;
+                feedbackMsg.className = "text-rose-600 dark:text-rose-400 font-bold flex items-center gap-1";
+                feedbackMsg.innerHTML = `<i data-lucide="x" class="w-3.5 h-3.5 inline shrink-0"></i> Sai. Đáp án đúng ${item.ans} đã tô xanh. Nhấn phím bất kỳ hoặc Space để tiếp tục.`;
+                continueBtn?.classList.remove('hidden');
             }
 
             ['A', 'B', 'C', 'D', 'E', 'F'].forEach(letter => {
                 const btn = document.getElementById(`optBtn_${letter}`);
                 if (!btn) return;
+                btn.classList.remove('answer-correct', 'answer-incorrect', 'answer-dimmed');
                 if (letter === item.ans) {
-                    btn.className = btn.className.replace(/border-slate-[0-9]+/g, '') + " border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-950 dark:text-emerald-100 font-semibold ring-1 ring-emerald-500";
+                    btn.classList.add('answer-correct');
                 } else if (letter === chosenLetter) {
-                    btn.className = btn.className.replace(/border-slate-[0-9]+/g, '') + " border-rose-500 bg-rose-50 dark:bg-rose-950/60 text-rose-950 dark:text-rose-100 font-semibold ring-1 ring-rose-500";
+                    btn.classList.add('answer-incorrect');
                 } else {
-                    btn.classList.add('opacity-40');
+                    btn.classList.add('answer-dimmed');
                 }
             });
 
             saveUserData();
             lucide.createIcons();
 
-            timerMsg.innerText = "Tự chuyển câu...";
-            state.autoAdvanceTimer = setTimeout(() => {
-                advanceNextPractice();
-            }, 850);
+            if (isCorrect) {
+                timerMsg.innerText = "Tự chuyển câu...";
+                state.autoAdvanceTimer = setTimeout(() => advanceNextPractice(), 850);
+            } else {
+                timerMsg.innerText = '';
+            }
         }
 
         function advanceNextPractice() {

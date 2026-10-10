@@ -12,6 +12,7 @@
             fcIdx: 0,
             fcFlipped: false,
             prAnswered: false,
+            waitingAfterWrong: false,
             prScore: 0,
             autoAdvanceTimer: null,
             rollbackQueue: [],
