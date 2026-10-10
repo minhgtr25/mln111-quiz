@@ -37,9 +37,11 @@
         window.addEventListener('keydown', (e) => {
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
             if (state.view === 'practice' && state.waitingAfterWrong) {
-                if (e.repeat || ['Shift', 'Control', 'Alt', 'Meta', 'CapsLock'].includes(e.key)) return;
-                e.preventDefault();
-                advanceNextPractice();
+                if (e.repeat) return;
+                if (e.code === 'Space' || e.key === ' ') {
+                    e.preventDefault();
+                    advanceNextPractice();
+                }
                 return;
             }
             const key = e.key.toUpperCase();

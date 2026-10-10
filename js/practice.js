@@ -186,6 +186,7 @@
                 state.prScore++;
                 state.correct.add(item.id);
                 state.wrong.delete(item.id);
+                clearQuestionRollback(item.id);
                 feedbackMsg.className = "truncate text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1";
                 feedbackMsg.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 inline"></i> Chính xác! Đáp án đúng: ${item.ans}`;
             } else {
@@ -194,7 +195,7 @@
                 state.wrong.add(item.id);
                 scheduleRollback(item);
                 feedbackMsg.className = "text-rose-600 dark:text-rose-400 font-bold flex items-center gap-1";
-                feedbackMsg.innerHTML = `<i data-lucide="x" class="w-3.5 h-3.5 inline shrink-0"></i> Sai. Đáp án đúng ${item.ans} đã tô xanh. Nhấn phím bất kỳ hoặc Space để tiếp tục.`;
+                feedbackMsg.innerHTML = `<i data-lucide="x" class="w-3.5 h-3.5 inline shrink-0"></i> Sai. Đáp án đúng ${item.ans} đã tô xanh. Nhấn Space để tiếp tục.`;
                 continueBtn?.classList.remove('hidden');
             }
 
@@ -229,13 +230,19 @@
             } else {
                 state.prIdx = 0;
             }
-            state.rollbackQueue = state.rollbackQueue.filter(entry => entry.targetIdx > state.prIdx);
             renderPracticeQuestion();
         }
 
         function scheduleRollback(wrongItem) {
+            // A due rollback copy was just answered incorrectly; schedule one more retry.
+            if (wrongItem.isRolledBack) {
+                state.rollbackQueue = state.rollbackQueue.filter(entry => entry.id !== wrongItem.id);
+            }
+            // Keep at most one future retry for each question.
+            if (state.rollbackQueue.some(entry => entry.id === wrongItem.id)) return;
+
             const offset = Math.floor(Math.random() * 3) + 5;
-            const targetIdx = state.prIdx + offset;
+            const targetIdx = state.prIdx + offset + 1;
             const clone = { ...wrongItem, isRolledBack: true };
 
             if (targetIdx < state.pool.length) {
@@ -244,7 +251,17 @@
                 state.pool.push(clone);
             }
 
-            state.rollbackQueue.push({ id: wrongItem.id, targetIdx });
+            state.rollbackQueue.push({ id: wrongItem.id });
+            refreshProgressMetrics();
+        }
+
+        function clearQuestionRollback(questionId) {
+            state.rollbackQueue = state.rollbackQueue.filter(entry => entry.id !== questionId);
+            for (let index = state.pool.length - 1; index > state.prIdx; index--) {
+                if (state.pool[index].id === questionId && state.pool[index].isRolledBack) {
+                    state.pool.splice(index, 1);
+                }
+            }
             refreshProgressMetrics();
         }
 
