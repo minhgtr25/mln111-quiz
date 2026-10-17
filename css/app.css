@@ -72,6 +72,8 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
     box-shadow: 0 16px 48px rgba(15, 23, 42, .045);
     gap: 1rem;
 }
+/* Keep the active-view toggle effective despite #practiceView's ID selector. */
+#practiceView.hidden { display: none; }
 #practiceView > div:first-child { min-height: 2.75rem; font-size: .8rem; }
 #practiceView > div:nth-child(2) { min-height: 8rem; padding-block: clamp(1rem, 5vh, 3rem); }
 #prQuestionText { max-width: 62ch; margin-inline: auto; font-size: clamp(1.25rem, 2.3vw, 1.9rem) !important; line-height: 1.42 !important; text-wrap: pretty; }
